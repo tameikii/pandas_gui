@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+        <head>
+        </head>
+        <body>
+            <a href="{% url 'fileupload:index' %}">トップ</a>
+            <br>
+
+            <form enctype="multipart/form-data" action="{% url 'fileupload:new_file' %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">保存</button>
+            </form>
+        </body>
+</html>

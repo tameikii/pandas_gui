@@ -1,13 +1,38 @@
-{% extends 'base.html' %}
+<!doctype html>
+<html>
+        <head>
+                <title>テストアプリ</title>
+        </head>
+        <body>
+          <a href="{% url 'fileupload:new_file' %}">ファイルのアップロード</a>
+          <br>
+          <h2>ダウンロードファイル一覧</h2>
+          <br>
 
-{% block content %}
+            <!-- file_objにデータがあれば表示、無ければ「ありません」 -->
+            {% if file_obj %}
+                <h2>NEWファイル</h2>
+                {% for file in file_obj %}
+                    <p>
+                        {{ file.uploaded_at }}
+                        {{ file.title }}
+                        <a href="{% url 'fileupload:detail' pk=file.id %}">詳細ページへ</a>
+                        <a href="{{ file.upload_dir.url }}">ダウンロード</a>
+                        <a href="{% url 'fileupload:delete' pk=file.id %}">削除</a>
+                    </p>
+                {% endfor %}
+            {% else %}
+                <h2>現在ファイルはありません</h2>
+            {% endif %}
+            <br>
 
+            <!-- TODOのリストを表示 -->
+            {% for todo in todo_obj %}
+                <p>
+                    {{ todo.created_at }}
+                    {{ todo.title }}
+                </p>
+            {% endfor %}
 
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">アップロード</button>
-  </form>
-
-  <p><a href="{% url 'index' %}">戻る</a></p>
-  {% endblock %}
+        </body>
+</html>

@@ -8,6 +8,7 @@ django = "*"
 pandas = "*"
 django-cleanup = "*"
 django-pandas = "*"
+django-widget-tweaks = "*"
 
 [dev-packages]
 
