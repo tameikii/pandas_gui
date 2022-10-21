@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView
 from .forms import FileUploadForm
 from .models import FileUploader, FileList
-from django_pandas.io import pd
+from django_pandas.io import pd as dpd
+import pandas as pd
 # Create your views here.
 
 
@@ -37,9 +38,11 @@ def detail(request, pk):
     file_value = get_object_or_404(FileUploader, id=pk)
     try:
         # utf-8に対応
-        df = pd.read_csv(file_value.upload_dir.path, index_col=0)
+        df = dpd.read_csv(file_value.upload_dir.path, index_col=0)
+
     except UnicodeDecodeError:
-        df = pd.read_csv(file_value.upload_dir.path, index_col=0)
+        df = dpd.read_csv(file_value.upload_dir.path, index_col=0)
+
     context = {
         'file_value': file_value,
         'df': df
@@ -54,3 +57,19 @@ def delete(request, pk):
         file_value.delete()
         return redirect('fileupload:index')
     return render(request, 'fileupload/delete.html', ctx)
+
+
+def edit(request, pk):
+    file_value = get_object_or_404(FileUploader, id=pk)
+    try:
+        # utf-8に対応
+        df = pd.DataFrame(dpd.read_csv(file_value.upload_dir.path, index_col=0))
+
+    except UnicodeDecodeError:
+        df = pd.DateFrame(dpd.read_csv(file_value.upload_dir.path, index_col=0))
+
+    ctx = {
+        'file_value': file_value,
+        'df': df
+    }
+    return render(request, 'fileupload/edit.html', ctx)

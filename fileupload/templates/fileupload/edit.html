@@ -18,9 +18,8 @@
 
             <!-- 各インスタンス属性の要素を取得 -->
             <p>アップロード日：{{ file_value.uploaded_at }}</p>
-            <p>ダウンロード：<a href="{{ file_value.upload_dir.url }}">{{ file_value.file_name }}</a></p>
-            <p>データベースからファイルを削除：<a href="{% url 'fileupload:delete' pk=file_value.id %}">削除</a></p>
-            <p>CSVファイルを編集：<a href="{% url 'fileupload:edit' pk=file_value.id %}">編集</a></p>
+            <p>トップページへ：<a href="{% url 'fileupload:index' %}">戻る</a></p>
+            <p>詳細ページへ：<a href="{% url 'fileupload:detail' pk=file_value.id %}">戻る</a></p>
             <br>
 
             <!-- 読み込んだCSVファイルをテーブル形式で表示 -->
@@ -54,6 +53,3 @@
   <script src="{% static '/js/jquery-3.5.0.min.js' %}"></script>
   <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
 <html>
-
-
-
