@@ -11,11 +11,11 @@ from django.core.validators import FileExtensionValidator
 
 
 def dir_path_name(instance, filename):
-    date_time = datetime.datetime.now()
-    date_dir = date_time.strftime('%Y/%m/%d')
-    time_stamp = date_time.strftime('%H:%M/')
-    new_filename = time_stamp + filename
-    dir_path = os.path.join('CSV/', date_dir, new_filename)
+    #date_time = datetime.datetime.now()
+    #date_dir = date_time.strftime('%Y/%m/%d/')
+    #time_stamp = date_time.strftime('%H:%M/')
+    #new_filename = time_stamp + filename
+    dir_path = os.path.join('CSV/', filename)
     return dir_path
 
 

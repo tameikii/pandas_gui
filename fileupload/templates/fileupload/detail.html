@@ -1,59 +1,230 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang='ja'>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
+<html lang='ja', class = 'h-100'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--Bootstrapの読み込み-->
+    <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
+    <!--staticのcssファイルの読み込み-->
+   <!--<link rel="stylesheet" href="{% static '/css/detail.css' %}">-->
+    <!--JQueryの読み込み-->
+    <script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <!--Pysctiptのcssの読み込み-->
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <!--Pysctiptのjsライブラリーを取り込み-->
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <head>
+            <title>pandas_GUIもどき</title>
+            <style media="screen">
+                header{
+                    height: 50px;
+                    box-shadow: 0px 0px 5px 0px hsla(0, 0%, 7%, 0.3);
+                }
+                nav {
+                    width: 230px;
+                }
+                .nav-link {
+                    color: white;
+                    background-color: rgba(255, 255, 255, 0.493);
+                }
+                main {
+                    transition: 0.3s all ease;
+                }
+                .table-wid{
+                    width: auto;
+                }
+            </style>
+    </head>
+    <py-env>
+        - pandas
+        - numpy
+    </py-env>
+    <body class="h-100">
+        <header class="w-100 d-flex justify-content-between align-items-center bg-light px-3">
+            <!— ヘッダーの内容 -->
+            <h1 class="mx-2 fs-4 text-primary fw-bold">DataFrameの編集</h1>
 
-        <head>
-                <title>テストアプリ</title>
-        </head>
-        <body>
-
-            <h2>CSVファイル</h2>
-            <br>
-
-            <a href="{% url 'fileupload:index' %}">戻る</a>
-            <br>
-
-            <!-- 各インスタンス属性の要素を取得 -->
-            <p>アップロード日：{{ file_value.uploaded_at }}</p>
-            <p>ダウンロード：<a href="{{ file_value.upload_dir.url }}">{{ file_value.file_name }}</a></p>
-            <p>データベースからファイルを削除：<a href="{% url 'fileupload:delete' pk=file_value.id %}">削除</a></p>
-            <p>CSVファイルを編集：<a href="{% url 'fileupload:edit' pk=file_value.id %}">編集</a></p>
-            <br>
-
-            <!-- 読み込んだCSVファイルをテーブル形式で表示 -->
-            <div class="container">
-            <h3>テーブル</h3>
-            <div class="container">
-            <div style="overflow-y:scroll; overflow-x:scroll; scrollbar-base-color:#99ff66 ; scrollbar-arrow-color:#ff0000;">
-                <div class="row">
-                <table class="table table-striped table-bordered table-hover">    
-                
-                            <tr>
-                                <td>index</td>
-                                {% for column, item in df.iteritems %}
-                                    <th>{{ column }}</th>
-                                {% endfor %}
-                            </tr>
-                            {% for index, rows in df.iterrows %}
-                                <tr>
-                                    <th>{{ index }}</th>
-                                    {% for row in rows %}
-                                        <td>{{ row }}</td>
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
-                </table>
+            <ul class="navbar-nav d-flex flex-row">
+                <li class="nav-item mx-3 text-muted active"><a href="#" class="nav-link text-secondary">New</a></li>
+                <li class="nav-item mx-3 text-muted"><a href="#" class="nav-link text-secondary">Save</a></li>
+            </ul>
+        </header>
+        <div class="d-flex flex-row w-100" style="height: calc(100% - 50px)">
+            <!--　サイドメニュ　ー-->
+            <nav class ="bg-dark">
+                <ul class="nav flex-column m-0 p-3">
+                    <li class="nav-item mb-2"><a href="{% url 'fileupload:index' %}" class="nav-link">トップへ</a></li>
+                    <li class="nav-item mb-2"><a href="{{ file_value.upload_dir.url }}" class="nav-link">download</a></li>
+                    <li class="nav-item mb-2"><a href="{% url 'fileupload:delete' pk=file_value.id %}" class="nav-link">deleate</a></li>
+                </ul>
+             </nav>
+            <!-- メインコンテンツ -->
+            <main class="w-100 bg-light">
+                <!-- 編集ボタン -->
+                <div class="bg-light border shadow-sm d-flex flex-row align-items-center">
+                    <div class="navbar-brand toggle-menu">
+                        <button class="btn btn-light btn-sm" id="toggle"><i class="fas fa-bars fa-lg btn btn-dark">メニュー</i></button>
+                        <button class="btn btn-light bnt-sm" id="readOnlyRowsToggle"><i class="fas fa-bars fa-lg btn btn-dark">全て表示</i></button>
+                        <button class="btn bnt-light bnt-sm" id = "info-button"><i class="fas fa-bars fa-lg btn btn-dark">df-info</i></button>
+                        <button class="btn bnt-light bnt-sm" id = "describe-button"><i class="fas fa-bars fa-lg btn btn-dark">df-describe</i></button>
+                    </div>
                 </div>
-            </div>
-            </div>
-            </div>
-        </body>
-  <script src="{% static '/js/jquery-3.5.0.min.js' %}"></script>
-  <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
-<html>
+
+                <!-- コンテンツ --> 
+                <div class="p-3">
+                    <div class="d-flex flex-row">
+                        <br>
+                        <!-- 読み込んだCSVファイルをテーブル形式で表示 -->
+                        <div class="container">
+                            <div style="overflow-y:scroll; overflow-x:scroll; scrollbar-base-color:#99ff66 ; scrollbar-arrow-color:#ff0000;">
+                            <div class="row">
+                            <table class="table table-striped table-bordered table-hover table-wid">    
+                                        <tr>
+                                            <th style="text-align: center"  >index</th>
+                                            {% for column, item in df.iteritems %}
+                                            <th style="text-align: center">{{ column }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                        <tbody id="sortable">
+                                        {% for index, rows in df.iterrows %}
+                                            {% if index <= 10 %}
+                                            <tr>
+                                                <th style="text-align: center" >{{ index }}</th>
+                                                {% for row in rows %}<td>{{ row }}</td>{% endfor %}
+                                            </tr>
+                                            {% else %}
+                                            <tr class="readOnlyRow">
+                                                <th style="text-align: center" >{{ index }}</th>
+                                                {% for row in rows %}<td>{{ row }}</td>{% endfor %}
+                                            </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </tbody>
+                            </table>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div id="infomation-container">
+                            <div id="data-info"></div>
+                        </div>
+                        <div id="describe-container">
+                            <div id="data-describe"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
 
 
+
+    <script type="text/javascript">
+        window.onload = () => {
+            // toggleボタン
+            let sidemenuToggle = document.getElementById('toggle')
+            // メインコンテンツを囲むmain要素
+            let page = document.getElementsByTagName('main')[0];
+            // 表示状態 trueで表示中 falseで非表示
+            let sidemenuStatus = true;
+            // ボタンクリック時のイベント
+            sidemenuToggle.addEventListener('click', () => {
+                // 表示状態を判定
+                if(sidemenuStatus){
+                    page.style.cssText = 'margin-left: -230px'
+                    sidemenuStatus = false;
+                }else{
+                    page.style.cssText = 'margin-left: 0px'
+                    sidemenuStatus = true;
+                }
+            })
+        }
+    </script>
+    <!--表をドラックで並び替えるようにするコード-->
+    <script>
+        $('#sortable').sortable({
+            //updateで並べ替えるたびに更新
+            update: function(){
+                $("#log").text($('#sortable').sortable("toArray"))
+            }
+        });
+        $('#sortable').disableSelection();
+        $('#sortable').bind('sortstop', function (e, ui) {
+            // ソートが完了したら実行される。
+            var rows = $('#sortable .rank');
+            for (var i = 0, rowTotal = rows.length; i < rowTotal; i += 1) {
+                $($('.rank')[i]).text(i + 1);
+            }
+        })
+    </script>
+    <script  type="text/javascript">
+        //javascript
+        $(document).ready(function() {
+            $(".readOnlyRow").hide();
+            $("#readOnlyRowsToggle").click(function() {
+             var elem = $(".readOnlyRow")[0];
+             if(elem.style.display == 'none')
+              $(".readOnlyRow").show();
+             else
+              $(".readOnlyRow").hide();
+            });
+           });
+    </script>
+    <script src="{% static '/js/jquery-3.5.0.min.js' %}"></script>
+    <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
+     <!--info button-->
+     <py-script>
+import pandas as pd
+import numpy as np
+import io
+
+#dataFrameを作成するための処理
+df_types  = list()
+{% for type in df_type_list %}
+df_types.append("{{type}}")
+{% endfor %}
+df_columns = list()
+{% for column, item in df.iteritems %}
+df_columns.append("{{ column }}")
+{% endfor %}
+df_content = list()
+{% for index, rows in df.iterrows %}
+element_list = list()
+    {% for row in rows %}
+element_list.append("{{ row }}")
+    {% endfor %}
+df_content.append(element_list)                  
+{% endfor %}
+df = pd.DataFrame(df_content,columns=df_columns)
+dtype_dict = {key: val for key, val in zip(df_columns, df_types)}
+df = df.astype(dtype_dict)
+
+
+#df.info()を表示するための処理[デフォルトの返り値がNone]
+#bufferにパイプ処理することで変数に格納
+info_button = Element('info-button')
+display_info_flag = False 
+def display_data_info(*ags, **kwgs):
+    if not display_info_flag:
+        buffer = io.StringIO()
+        df.info(buf=buffer)
+        df_info = buffer.getvalue().split("\n")
+        df_info = pd.DataFrame(df_info[:-1],columns=["df-info"])
+        pyscript.write('data-info',df_info)
+
+#df.describe()を表示するための処理[describeの出力はDataFrame型]
+describe_button = Element('describe-button')
+display_describe_flag = False
+def display_data_describe(*ags, **kwgs):
+    if not display_describe_flag:
+        pyscript.write('data-describe',df.describe(include="all"))
+
+
+info_button.element.onclick = display_data_info
+describe_button.element.onclick = display_data_describe
+     </py-script>
+</html>
 

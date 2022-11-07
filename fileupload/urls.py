@@ -8,5 +8,4 @@ urlpatterns = [
     path('new_file', views.new_file, name='new_file'),
     path('detail/<int:pk>/', views.detail, name='detail'),
     path('delete/<int:pk>/', views.delete, name='delete'),
-    path('edit/<int:pk>/', views.edit, name='edit'),
 ]

@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
         <head>
+            
                 <title>テストアプリ</title>
         </head>
         <body>
@@ -15,7 +16,7 @@
                 {% for file in file_obj %}
                     <p>
                         {{ file.uploaded_at }}
-                        {{ file.title }}
+                        {{ file.file_name }}
                         <a href="{% url 'fileupload:detail' pk=file.id %}">詳細ページへ</a>
                         <a href="{{ file.upload_dir.url }}">ダウンロード</a>
                         <a href="{% url 'fileupload:delete' pk=file.id %}">削除</a>
@@ -33,6 +34,4 @@
                     {{ todo.title }}
                 </p>
             {% endfor %}
-
-        </body>
 </html>

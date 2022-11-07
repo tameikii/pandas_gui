@@ -9,6 +9,9 @@ pandas = "*"
 django-cleanup = "*"
 django-pandas = "*"
 django-widget-tweaks = "*"
+pandas-profiling = "*"
+seaborn = "*"
+matplotlib = "*"
 
 [dev-packages]
 
