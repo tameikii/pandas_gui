@@ -1,14 +1,17 @@
 from distutils.command.upload import upload
 from django.conf import settings
-from .models import FileList, FileUploader
+from .models import FileList, FileUploader, ImageFileUploader
 from django.shortcuts import get_object_or_404, render, redirect
 import os
 import datetime
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 from django_pandas.io import read_frame
 
-
 # ファイルを更新する関数
+
+
 def pandas_csv(df, filename):
     update_path = os.path.join(settings.MEDIA_ROOT, 'CSV/', filename)
     df.to_csv(update_path)

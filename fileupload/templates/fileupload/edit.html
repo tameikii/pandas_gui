@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang='ja'>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="{% static '/js/jquery-3.5.0.min.js' %}"></script>
+  <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}"> 
+  <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  <!--Pyscriptのインストール-->
+  <!--python の外部ライブラリ-->
+        <head>
+                <title>テストアプリ</title>
+        </head>
+        <body>
+
+            <h2>データフレーム編集</h2>
+            <br>
+            <br>
+
+            <!-- 各インスタンス属性の要素を取得 -
+
+            <br>
+            <!--htmlを埋め込むためのコード-->
+            <iframe src="{{profile}}">
+            <py-env>
+                - pandas
+                - numpy
+              </py-env>
+              <py-button id="graph-button" label="グラフを表示"></py-button>
+              <div id="graph-container"></div>
+            <py-script >
+import numpy as np
+import pandas as pd
+print(type({{profile}}))
+
+
+            </py-script>
+
+        </body>
+<html>
+
+

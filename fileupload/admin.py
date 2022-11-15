@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Category, FileList, FileUploader
+from .models import Category, FileList, FileUploader, ImageFileUploader
 # Register your models here.
 admin.site.register(Category)
 admin.site.register(FileList)
 admin.site.register(FileUploader)
+admin.site.register(ImageFileUploader)

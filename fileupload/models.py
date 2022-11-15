@@ -1,7 +1,7 @@
 import os
 import pandas
 import datetime
-
+from PIL import Image
 from django.db import models
 from django_pandas.io import read_frame
 from django.core.validators import FileExtensionValidator
@@ -55,3 +55,7 @@ class FileList(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ImageFileUploader(models.Model):
+    image = models.ImageField(upload_to='img/')

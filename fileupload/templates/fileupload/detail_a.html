@@ -23,58 +23,6 @@
     <head>
             <title>pandas_GUIもどき</title>
             <style media="screen">
-
-                .cmn-toggle {
-                    position: absolute;
-                    margin-left: -9999px;
-                    visibility: hidden;
-                }
-                  .cmn-toggle + label {
-                    display: block;
-                    position: relative;
-                    cursor: pointer;
-                    outline: none;
-                    user-select: none;
-                }
-                input.cmn-toggle-round-flat + label {
-                    padding: 2px;
-                    width: 60px;
-                    height: 30px;
-                    background-color: #dddddd;
-                    border-radius: 30px;
-                    transition: background 0.4s;
-                  }
-                  input.cmn-toggle-round-flat + label:before,
-                  input.cmn-toggle-round-flat + label:after {
-                    display: block;
-                    position: absolute;
-                    content: "";
-                  }
-                  input.cmn-toggle-round-flat + label:before {
-                    top: 2px;
-                    left: 2px;
-                    bottom: 2px;
-                    right: 2px;
-                    background-color: #fff;
-                    border-radius: 30px;
-                    transition: background 0.4s;
-                  }
-                  input.cmn-toggle-round-flat + label:after {
-                    top: 4px;
-                    left: 4px;
-                    bottom: 4px;
-                    width: 26px;
-                    background-color: #dddddd;
-                    border-radius: 26px;
-                    transition: margin 0.4s, background 0.4s;
-                  }
-                  input.cmn-toggle-round-flat:checked + label {
-                    background-color: #8ce196;
-                  }
-                  input.cmn-toggle-round-flat:checked + label:after {
-                    margin-left: 30px;
-                    background-color: #8ce196;
-                  }
                 header{
                     height: 50px;
                     box-shadow: 0px 0px 5px 0px hsla(0, 0%, 7%, 0.3);
@@ -82,7 +30,7 @@
                 nav {
                     width: 230px;
                 }
-                .nav_font-col{
+                .nav-link {
                     color: white;
                     background-color: rgba(255, 255, 255, 0.493);
                 }
@@ -120,19 +68,14 @@
                   z-index: 8;
                   display: block; /* 追加 */
                 }
-                .info-container{
-                    display:flex;
-                    height: 100vw;
-                }
-                .base {
-                    display: flex;
-                    flex-direction: row;
-                  }
-            
             </style>
     </head>
+    <py-env>
+        - pandas
+        - numpy
+    </py-env>
 
-    <body class="h-100">
+    <body>
         <header class="w-100 d-flex justify-content-between align-items-center bg-light px-3">
             <!— ヘッダーの内容 -->
             <h1 class="mx-2 fs-4 text-primary fw-bold">DataFrameの編集</h1>
@@ -147,9 +90,9 @@
             <!--　サイドメニュ　ー-->
             <nav class ="bg-dark">
                 <ul class="nav flex-column m-0 p-3">
-                    <li class="nav-item mb-2"><a href="{% url 'fileupload:index' %}" class="nav-link nav_font-col">トップへ</a></li>
-                    <li class="nav-item mb-2"><a href="{{ file_value.upload_dir.url }}" class="nav-link nav_font-col">download</a></li>
-                    <li class="nav-item mb-2"><a href="{% url 'fileupload:delete' pk=file_value.id %}" class="nav-link nav_font-col">deleate</a></li>
+                    <li class="nav-item mb-2"><a href="{% url 'fileupload:index' %}" class="nav-link">トップへ</a></li>
+                    <li class="nav-item mb-2"><a href="{{ file_value.upload_dir.url }}" class="nav-link">download</a></li>
+                    <li class="nav-item mb-2"><a href="{% url 'fileupload:delete' pk=file_value.id %}" class="nav-link">deleate</a></li>
                 </ul>
              </nav>
             <!-- メインコンテンツ -->
@@ -161,50 +104,104 @@
                     </div>
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
-                          <a href="#show-dataframe" class="nav-link active" data-bs-toggle="tab" aria-current="page">DataFrame</a>
+                          <a class="nav-link active" aria-current="page" href="#">Active</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#profile" class="nav-link" data-bs-toggle="tab" aria-current="page">Profiling-Reporte</a>
+                          <a class="nav-link" href="#">Link</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#data-info" class="nav-link" data-bs-toggle="tab" aria-current="page">DF-info and discribe</a>
+                          <a class="nav-link" href="#">Link</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#seaborn-pair" class="nav-link" data-bs-toggle="tab" aria-current="page">seaborn PairPlot</a>
+                          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                         </li>
-                    </ul>
+                      </ul>
                 </div>
                 <!-- コンテンツ --> 
-                <div class='tab-content'>
-                    <div id="show-dataframe" class="tab-pane active">
+                <div class="p-3">
+                    <div class = "container">
+                        <div class="ratio ratio-16x9">
+                        <iframe src= "{% url 'fileupload:profile' %}" title="DataProfiling" allowfullscreen sandbox scrolling=”auto”></iframe>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="d-flex flex-row">
+                        <br>
                         <div class = "container">
-                            <div class="ratio ratio-16x9">
-                            <iframe src= "{% url 'fileupload:write_dataframe' pk=file_value.id %}" title="DataFrame" allowfullscreen sandbox scrolling=”auto”></iframe>
+                            <div style="overflow-y:scroll; overflow-x:scroll; scrollbar-base-color:#99ff66 ; scrollbar-arrow-color:#ff0000;">
+                            <div class="row">
+                                <table class="table table-striped table-bordered table-hover table-wid" id="dataframe">    
+                                    <tr>
+                                        <th style="text-align: center"  ></th>
+                                        {% for column, item in df.iteritems %}
+                                        <th style="text-align: center">{{ column }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                    <tbody id="sortable">
+                                    {% for index, rows in df.iterrows %}
+                                        {% if index <= 10 %}
+                                        <tr>
+                                            <th style="text-align: center" >{{ index }}</th>
+                                            {% for row in rows %}<td>{{ row }}</td>{% endfor %}
+                                        </tr>
+                                        {% else %}
+                                        <tr class="readOnlyRow">
+                                            <th style="text-align: center" >{{ index }}</th>
+                                            {% for row in rows %}<td>{{ row }}</td>{% endfor %}
+                                        </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>    
                             </div>
                         </div>
                     </div>
-                    <div id="profile" class="tab-pane">
+                    
+                        <br>
                         <div class = "container">
-                            <div class="ratio ratio-16x9">
-                            <iframe src= "{% url 'fileupload:profile' pk=file_value.id %}" title="DataProfiling" allowfullscreen sandbox scrolling=”auto”></iframe>
+                            <div style="overflow-y:scroll; overflow-x:scroll; scrollbar-base-color:#99ff66 ; scrollbar-arrow-color:#ff0000;">
+                            <div class="row">
+                                <table class="table table-striped table-bordered table-hover table-wid" id="dataframe">    
+                                    <tr style="text-align: center"  ><th>df-info</th></tr>
+                                    {% for info in df_info %}
+                                    <tr style="text-align: center"><td>{{ info }}</td></tr>
+                                    {% endfor %}               
+                                </table>
+                            </div>    
+                            </div>
+                        </div>
+                        <br>
+                        <div class = "container">
+                            <div style="overflow-y:scroll; overflow-x:scroll; scrollbar-base-color:#99ff66 ; scrollbar-arrow-color:#ff0000;">
+                            <div class="row">
+                                <table class="table table-striped table-bordered table-hover table-wid" id="dataframe">    
+                                    <tr>
+                                        <th style="text-align: center"  ></th>
+                                        {% for column, item in df_describe.iteritems %}
+                                        <th style="text-align: center">{{ column }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                    {% for index, rows in df_describe.iterrows %}
+                                        <tr>
+                                            <th style="text-align: center" >{{ index }}</th>
+                                            {% for row in rows %}<td>{{ row }}</td>{% endfor %}
+                                        </tr>                    
+                                    {% endfor %}                                    
+                                </table>
+                            </div>    
                             </div>
                         </div>
                     </div>
-                    <div id="data-info" class="tab-pane base">
-                            <div class="info-container">
-                            <iframe src= "{% url 'fileupload:df-info' pk=file_value.id %}" title="DataInfomation" allowfullscreen sandbox scrolling=”auto” width ="30%"></iframe>
-                            </div>
-                            <div class="ratio ratio-16x9">
-                            <iframe src= "{% url 'fileupload:df-describe' pk=file_value.id %}" title="DataDescribe" allowfullscreen sandbox scrolling=”auto” width ="70%"></iframe>
-                            <div>
-                    </div>
-                    <div id="seaborn-pair" class="tab-pane base">
-                        
+                    <div class="d-flex flex-row">
+                            <div id="data-info"></div>
+                            <div id="data-describe"></div>
                     </div>
                 </div>
             </main>
         </div>
     </body>
+
     <script type="text/javascript">
         //columnsの先頭が空白なことに注意
         flag = 0
@@ -228,36 +225,6 @@
         }
         length_table = table_data.length
         length_columns = table_columns.length
-    </script>
-    <script>
-    //toggleボタンに関する処理
-    $(document).ready(function() {
-       $(".readOnlyRow").hide(); 
-       $('input').change(function() {
-            $('input:checked').each(function(){
-                var elem = $(".readOnlyRow")[0];
-             if(elem.style.display == 'none')
-              $(".readOnlyRow").show();
-             else
-              $(".readOnlyRow").hide();
-            })
-        })
-    })
-     //javascript
-     function valueChange(event){
-        // イベントが発生した時の処理
-        $(".readOnlyRow").hide();
-        $("#cmn-toggle-4").click(function() {
-         var elem = $(".readOnlyRow")[0];
-         if(elem.style.display == 'none')
-          $(".readOnlyRow").show();
-         else
-          $(".readOnlyRow").hide();
-        });
-    }
-    
-    let saveCheckbox = document.getElementById('cmn-toggle-4');
-    saveCheckbox.addEventListener('change', valueChange);
     </script>
     <script type="text/javascript">
         window.onload = () => {
@@ -297,9 +264,38 @@
             }
         })
     </script>
+    <script  type="text/javascript">
+        //javascript
+        $(document).ready(function() {
+            $(".readOnlyRow").hide();
+            $("#readOnlyRowsToggle").click(function() {
+             var elem = $(".readOnlyRow")[0];
+             if(elem.style.display == 'none')
+              $(".readOnlyRow").show();
+             else
+              $(".readOnlyRow").hide();
+            });
+           });
+    </script>
     <script src="{% static '/js/jquery-3.6.1.min.js' %}"></script>
     <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script> 
      <!--info button-->
+    
+
+     <script type="text/javascript">
+        //表示ボタンの２度押しを防止する処理]
+        const info = document.getElementById("info-button")
+        info.addEventListener("click", () => {
+            info.disabled = true;
+            //console.log(`${diplay_info}`);
+        });
+           
+        const describe = document.getElementById("describe-button")
+        describe.addEventListener("click", () => {
+            describe.disabled = true;
+            //console.log(`${diplay_describe}`);
+        });
+    </script>
     <!--読み込みを行う順番の関係-->
     <script>
 
@@ -312,5 +308,26 @@
             eval(execString)
         }
     </script>
+    <py-script>
+import pandas as pd
+import numpy as np
+from js import createObject, table_data, table_columns,length_table, length_columns
+from pyodide.ffi import create_proxy
+createObject(create_proxy(globals()), "pyodideGlobals")
+
+#dataFrameを作成するための処理
+
+df_types  = list()
+{% for type in df_type_list %}
+df_types.append("{{type}}")
+{% endfor %}
+
+dataframe = np.array([[table_data[i][j] for j in range(int(length_columns))] for i in range(length_table)])
+df = pd.DataFrame(dataframe,columns=table_columns)
+df = df[df.columns[1:]]
+df_prime = df
+dtype_dict = {key: val for key, val in zip(df.columns, df_types)}
+df = df.astype(dtype_dict)
+    </py-script>
 </html>
 

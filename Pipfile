@@ -12,6 +12,8 @@ django-widget-tweaks = "*"
 pandas-profiling = "*"
 seaborn = "*"
 matplotlib = "*"
+js = "*"
+pillow = "*"
 
 [dev-packages]
 
