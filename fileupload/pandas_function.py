@@ -41,10 +41,38 @@ def create_df_describe(df):
 
 
 def create_sns_pairplot(df, index):
-    graph_path = os.path.join(settings.MEDIA_ROOT, 'IMAGE/')
+    graph_path = os.path.join(settings.MEDIA_ROOT, 'images/', 'pair/')
     graph_file_name = "pairplot_"+str(index)+".png"
     if not os.path.isdir(graph_path):
         os.makedirs(graph_path)
-    sns.pairplot(df, palette="husl")
+    plt.clf()
+    sns.pairplot(df)
+    plt.savefig(graph_path + graph_file_name)
+    return graph_file_name
+
+
+def create_sns_boxplot(df, index):
+    graph_path = os.path.join(settings.MEDIA_ROOT, 'images/', 'box/')
+    graph_file_name = "boxplot_"+str(index)+".png"
+    if not os.path.isdir(graph_path):
+        os.makedirs(graph_path)
+    plt.clf()
+    sns.boxplot(data=df)
+    plt.savefig(graph_path + graph_file_name)
+    return graph_file_name
+
+
+def create_sns_heatmap(df, index):
+    graph_path = os.path.join(settings.MEDIA_ROOT, 'images/', 'heatmap/')
+    graph_file_name = "heatmap_"+str(index)+".png"
+    if not os.path.isdir(graph_path):
+        os.makedirs(graph_path)
+    plt.clf()
+    plt.figure(figsize=(10, 10))
+    options = {'square': True, 'annot': True, 'fmt': '0.2f', 'xticklabels': df.columns,
+               'yticklabels': df.columns, 'annot_kws': {'size': 12}, 'vmin': -1, 'vmax': 1, 'center': 0, 'cbar': False}
+    ax = sns.heatmap(df.corr(), **options)
+    ax.tick_params(axis='x', labelsize=10)
+    ax.tick_params(axis='y', labelsize=10)
     plt.savefig(graph_path + graph_file_name)
     return graph_file_name

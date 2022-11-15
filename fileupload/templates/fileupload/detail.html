@@ -122,7 +122,7 @@
                 }
                 .graph img{
                     max-width: 100%;
-                    height: auto;
+                    max-height:100%;
                 }
             </style>
     </head>
@@ -165,8 +165,15 @@
                           <a href="#data-info" class="nav-link" data-bs-toggle="tab" aria-current="page">DF-info and discribe</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#seaborn-pair" class="nav-link" data-bs-toggle="tab" aria-current="page">seaborn PairPlot</a>
+                            <a href="#seaborn-pair" class="nav-link" data-bs-toggle="tab" aria-current="page">PairPlot</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="#seaborn-box" class="nav-link" data-bs-toggle="tab" aria-current="page">BoxPlot</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#seaborn-heat" class="nav-link" data-bs-toggle="tab" aria-current="page">Heatmap</a>
+                        </li>
+                        
                     </ul>
                 </div>
                 <!-- コンテンツ --> 
@@ -192,8 +199,24 @@
                             </div>
                     </div>
                     <div id="seaborn-pair" class="tab-pane base">
-                        <div class = "graph">
-                                <img src= "{{graph}}">
+                        <div class = "container">
+                            <div class="ratio ratio-16x9">
+                                <iframe src= "{{pair_graph}}" title="DataProfiling" allowfullscreen  sandbox = "allow-scripts" scrolling=”auto”></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="seaborn-box" class="tab-pane base">
+                        <div class = "container">
+                            <div class="ratio ratio-16x9">
+                                <iframe src= "{{box_graph}}" title="DataProfiling" allowfullscreen  sandbox = "allow-scripts" scrolling=”auto”></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="seaborn-heat" class="tab-pane base">
+                        <div class = "container">
+                            <div class="ratio ratio-16x9">
+                                <iframe src= "{{heat_graph}}" title="DataProfiling" allowfullscreen  sandbox = "allow-scripts" scrolling=”auto”></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
