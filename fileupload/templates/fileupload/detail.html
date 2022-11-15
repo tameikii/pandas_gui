@@ -120,15 +120,10 @@
                   z-index: 8;
                   display: block; /* 追加 */
                 }
-                .info-container{
-                    display:flex;
-                    height: 100vw;
+                .graph img{
+                    max-width: 100%;
+                    height: auto;
                 }
-                .base {
-                    display: flex;
-                    flex-direction: row;
-                  }
-            
             </style>
     </head>
 
@@ -179,27 +174,27 @@
                     <div id="show-dataframe" class="tab-pane active">
                         <div class = "container">
                             <div class="ratio ratio-16x9">
-                            <iframe src= "{% url 'fileupload:write_dataframe' pk=file_value.id %}" title="DataFrame" allowfullscreen sandbox scrolling=”auto”></iframe>
+                            <iframe src= "{% url 'fileupload:write_dataframe' pk=file_value.id %}" title="DataFrame" allowfullscreen sandbox = "allow-scripts" scrolling=”auto”></iframe>
                             </div>
                         </div>
                     </div>
                     <div id="profile" class="tab-pane">
                         <div class = "container">
                             <div class="ratio ratio-16x9">
-                            <iframe src= "{% url 'fileupload:profile' pk=file_value.id %}" title="DataProfiling" allowfullscreen sandbox scrolling=”auto”></iframe>
+                            <iframe src= "{% url 'fileupload:profile' pk=file_value.id %}" title="DataProfiling" allowfullscreen  sandbox = "allow-scripts" scrolling=”auto”></iframe>
                             </div>
                         </div>
                     </div>
                     <div id="data-info" class="tab-pane base">
-                            <div class="info-container">
-                            <iframe src= "{% url 'fileupload:df-info' pk=file_value.id %}" title="DataInfomation" allowfullscreen sandbox scrolling=”auto” width ="30%"></iframe>
+                            <div class="info-container">                                
+                                    <iframe src= "{% url 'fileupload:df-info' pk=file_value.id %}" title="DataInfomation" allowfullscreen sandbox scrolling=”auto” width ="30%"></iframe>
+                                    <iframe src= "{% url 'fileupload:df-describe' pk=file_value.id %}" title="DataDescribe" allowfullscreen sandbox scrolling=”auto” width ="70%"></iframe>                                
                             </div>
-                            <div class="ratio ratio-16x9">
-                            <iframe src= "{% url 'fileupload:df-describe' pk=file_value.id %}" title="DataDescribe" allowfullscreen sandbox scrolling=”auto” width ="70%"></iframe>
-                            <div>
                     </div>
                     <div id="seaborn-pair" class="tab-pane base">
-                        
+                        <div class = "graph">
+                                <img src= "{{graph}}">
+                        </div>
                     </div>
                 </div>
             </main>

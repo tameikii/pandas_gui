@@ -1,12 +1,14 @@
+import matplotlib.pyplot as plt
 import datetime
 import os
+from io import BytesIO
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView
 from .forms import FileUploadForm, FilenameForm
 from .models import FileUploader, FileList, dir_path_name
 from .create_file import pandas_csv, create_csv
-from .pandas_function import create_data_profiling, get_df_type, create_df_info, create_df_describe
+from .pandas_function import create_data_profiling, get_df_type, create_df_info, create_df_describe,  create_sns_pairplot
 from django_pandas.io import pd as dpd
 import pandas as pd
 import pandas_profiling as pdp
@@ -52,12 +54,14 @@ def detail(request, pk):
     except UnicodeDecodeError:
         df = pd.read_csv(file_value.upload_dir.path, index_col=0)
     df_type_list = get_df_type(df)
-    # create_data_profiling(df)
+    graph_file_name = create_sns_pairplot(df, pk)
+    create_data_profiling(df)
     df_prime = df
     context = {
         'file_value': file_value,
         'df': df_prime,
         'df_type_list': df_type_list,
+        'graph': os.path.join('/media', 'IMAGE', graph_file_name)
     }
     if "btn_prime" in request.POST:
         context['df'] = df_prime

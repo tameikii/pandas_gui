@@ -1,13 +1,14 @@
+import base64
+from django.conf import settings
+import datetime
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
 import io
 import os
 import pandas as pd
 import pandas_profiling as pdp
 import matplotlib
-import numpy as np
-import seaborn as sns
-import datetime
-from django.conf import settings
-
 matplotlib.use('agg')
 
 
@@ -37,3 +38,13 @@ def create_df_info(df):
 
 def create_df_describe(df):
     return df.describe(include="all")
+
+
+def create_sns_pairplot(df, index):
+    graph_path = os.path.join(settings.MEDIA_ROOT, 'IMAGE/')
+    graph_file_name = "pairplot_"+str(index)+".png"
+    if not os.path.isdir(graph_path):
+        os.makedirs(graph_path)
+    sns.pairplot(df, palette="husl")
+    plt.savefig(graph_path + graph_file_name)
+    return graph_file_name
